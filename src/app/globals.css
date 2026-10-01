@@ -1,17 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0c0d0b;
-  --surface: #121411;
-  --surface-raised: #181b16;
-  --surface-soft: #20241d;
-  --foreground: #f1f2e9;
-  --muted: #a5aa9e;
-  --subtle: #747b6f;
-  --line: rgba(241, 242, 233, 0.13);
-  --line-strong: rgba(241, 242, 233, 0.28);
-  --accent: #c6f36b;
-  --accent-soft: rgba(198, 243, 107, 0.14);
+  --background: #08090e;
+  --surface: #10131b;
+  --surface-raised: #161b26;
+  --surface-soft: #202838;
+  --foreground: #f2f6ff;
+  --muted: #aeb9cc;
+  --subtle: #77839a;
+  --line: rgba(216, 229, 255, 0.14);
+  --line-strong: rgba(216, 229, 255, 0.32);
+  --accent: #67d8ff;
+  --accent-strong: #a78bfa;
+  --accent-soft: rgba(103, 216, 255, 0.14);
   --danger: #ff9f9a;
 }
 
@@ -38,7 +39,10 @@ html {
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(circle at 78% -12%, rgba(103, 216, 255, 0.12), transparent 33rem),
+    radial-gradient(circle at 8% 38%, rgba(167, 139, 250, 0.06), transparent 28rem),
+    var(--background);
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, sans-serif;
   overflow-x: hidden;
@@ -116,7 +120,7 @@ html.lenis body {
 
 .accent-button {
   background: var(--accent);
-  color: #091008;
+  color: #071018;
   transition: transform 160ms ease, opacity 160ms ease;
 }
 
@@ -127,6 +131,100 @@ html.lenis body {
 .accent-button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.kinetic-deck {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+.deck-control {
+  display: inline-flex;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line-strong);
+  color: var(--foreground);
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.deck-control:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.deck-control:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.kinetic-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: linear-gradient(145deg, rgba(25, 31, 43, 0.96), rgba(10, 12, 18, 0.98));
+  box-shadow: 0 24px 54px -42px rgba(0, 0, 0, 0.92);
+  transition: border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.kinetic-card::before {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  content: "";
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(300px circle at var(--pointer-x, 50%) var(--pointer-y, 36%), rgba(103, 216, 255, 0.16), transparent 60%);
+  transition: opacity 240ms ease;
+}
+
+.kinetic-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.kinetic-card:hover,
+.kinetic-card[data-active='true'] {
+  border-color: rgba(103, 216, 255, 0.62);
+  box-shadow: 0 28px 64px -38px rgba(103, 216, 255, 0.28), 0 28px 64px -42px rgba(0, 0, 0, 0.94);
+}
+
+.kinetic-card:hover::before,
+.kinetic-card[data-active='true']::before {
+  opacity: 1;
+}
+
+.project-motion-preview {
+  position: relative;
+  height: 8.25rem;
+  margin-top: 1.4rem;
+  overflow: hidden;
+  border: 1px solid rgba(216, 229, 255, 0.12);
+  background: linear-gradient(140deg, rgba(103, 216, 255, 0.07), rgba(10, 13, 20, 0.16) 48%, rgba(167, 139, 250, 0.08));
+}
+
+.project-motion-preview::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent);
+  opacity: 0;
+  transform: translateX(-110%);
+}
+
+.kinetic-card:hover .project-motion-preview::after {
+  animation: project-sheen 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes project-sheen {
+  to {
+    opacity: 1;
+    transform: translateX(110%);
+  }
 }
 
 .text-balance {
@@ -154,5 +252,9 @@ html.lenis body {
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .kinetic-card:hover .project-motion-preview::after {
+    animation: none;
   }
 }

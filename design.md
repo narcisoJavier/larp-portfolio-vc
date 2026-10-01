@@ -1,15 +1,16 @@
 ---
 colors:
-  canvas: "#0c0d0b"
-  surface: "#121411"
-  surface_raised: "#181b16"
-  surface_soft: "#20241d"
-  ink: "#f1f2e9"
-  ink_muted: "#a5aa9e"
-  ink_subtle: "#747b6f"
-  border: "rgba(241, 242, 233, 0.13)"
-  border_strong: "rgba(241, 242, 233, 0.28)"
-  accent: "#c6f36b"
+  canvas: "#08090e"
+  surface: "#10131b"
+  surface_raised: "#161b26"
+  surface_soft: "#202838"
+  ink: "#f2f6ff"
+  ink_muted: "#aeb9cc"
+  ink_subtle: "#77839a"
+  border: "rgba(216, 229, 255, 0.14)"
+  border_strong: "rgba(216, 229, 255, 0.32)"
+  accent: "#67d8ff"
+  accent_secondary: "#a78bfa"
 typography:
   display: "Newsreader, Georgia, serif"
   body: "Geist, Arial, sans-serif"
@@ -28,19 +29,19 @@ motion:
 
 ## Visual identity
 
-The portfolio is a quiet, evidence-led engineering portfolio. Dark matte surfaces create focus. Newsreader gives the work a human editorial voice. Geist keeps explanations readable. Geist Mono marks only technical metadata.
+The portfolio is an evidence-led engineering portfolio with a tactile, kinetic feel. Midnight surfaces create depth. Newsreader gives the work a human editorial voice. Geist keeps explanations readable. Geist Mono marks only technical metadata.
 
-The acid-lime accent has one job: focus, action, and selected route state. No competing cyan, violet, amber, or emerald status palette.
+Cool cyan carries focus, action, and selected route state. Violet adds depth inside motion previews only. Color never substitutes for labels, evidence, or controls.
 
 ## Composition
 
 - First viewport: name, focus areas, clear actions, and the interactive route proof.
 - About: one narrative, current focus, education, and credentials.
 - Skills: four readable groups sourced from `resumeData`.
-- Work: six project case-study cards with verified evidence.
+- Work: six verified projects in a draggable spring deck; select a card to reveal evidence without leaving the shelf.
 - Contact: direct channels and one clear inquiry form.
 
-Avoid decorative HUDs, fake telemetry, repeated corner marks, full-page grids, and interface labels without a user-facing job.
+Avoid decorative HUDs, fake telemetry, and interface labels without a user-facing job. Keep meaningful movement: spring dragging, card selection, project-diagram animation, and clear navigation transitions.
 
 ## Three.js route proof
 

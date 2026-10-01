@@ -184,7 +184,7 @@ function RouteScene({ startId, goalId, path, onNodeClick, prefersReducedMotion }
             <bufferGeometry>
               <bufferAttribute attach="attributes-position" args={[pathPositions, 3]} />
             </bufferGeometry>
-            <lineBasicMaterial color="#c6f36b" linewidth={2} />
+            <lineBasicMaterial color="#67d8ff" linewidth={2} />
           </lineSegments>
         )}
 
@@ -200,7 +200,7 @@ function RouteScene({ startId, goalId, path, onNodeClick, prefersReducedMotion }
               }}
             >
               <sphereGeometry args={[isSelected ? 0.16 : 0.11, 16, 16]} />
-              <meshBasicMaterial color={isSelected ? '#c6f36b' : '#e3e9d8'} />
+              <meshBasicMaterial color={isSelected ? '#67d8ff' : '#e8f1ff'} />
             </mesh>
           );
         })}
