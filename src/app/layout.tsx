@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Newsreader } from "next/font/google";
+import { Geist, Geist_Mono, Syne } from "next/font/google";
 import LenisProvider from "@/components/ui/LenisProvider";
 import "./globals.css";
 
@@ -13,11 +13,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
+const syne = Syne({
+  variable: "--font-syne",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+  weight: ["700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -78,7 +77,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
@@ -88,7 +87,7 @@ export default function RootLayout({
         {/* Accessible Skip Navigation Link (WCAG 2.4.1) */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent focus:text-[#091008] focus:font-mono focus:text-xs focus:font-bold focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:font-mono focus:text-xs focus:font-bold focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-zinc-300"
         >
           Skip to Main Content
         </a>

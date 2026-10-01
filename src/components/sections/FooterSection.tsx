@@ -1,34 +1,69 @@
 "use client";
-
 import React, { memo, useCallback } from 'react';
-import { ArrowUp } from 'lucide-react';
 import { useLenis } from 'lenis/react';
 import { resumeData } from '@/data/resumeData';
+import { ArrowUp } from 'lucide-react';
 
 export const FooterSection = memo(function FooterSection() {
   const lenis = useLenis();
 
   const scrollToTop = useCallback(() => {
     if (lenis) {
-      lenis.scrollTo(0, { duration: 0.8 });
+      lenis.scrollTo(0, { duration: 1.2 });
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [lenis]);
 
   return (
-    <footer className="flex flex-col gap-6 py-10 font-mono text-xs text-[var(--muted)] sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <p className="text-sm font-semibold text-[var(--foreground)]">{resumeData.personalInfo.name}</p>
-        <p className="mt-2 font-sans text-sm leading-6">Computer Science student / Baguio City, Philippines</p>
-      </div>
-      <div className="flex flex-wrap items-center gap-5">
-        <a href={resumeData.personalInfo.github} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--accent)]">GitHub</a>
-        <a href={resumeData.personalInfo.linkedin} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-[var(--accent)]">LinkedIn</a>
-        <a href={`mailto:${resumeData.personalInfo.email}`} className="transition-colors hover:text-[var(--accent)]">Email</a>
-        <button type="button" onClick={scrollToTop} className="inline-flex items-center gap-1 transition-colors hover:text-[var(--accent)]">
-          Top <ArrowUp className="h-3.5 w-3.5" />
-        </button>
+    <footer className="w-full bg-[#08080a] border-t border-white/10 py-10 px-4 font-mono text-xs text-zinc-400">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="space-y-1 text-center md:text-left">
+          <div className="flex items-center justify-center md:justify-start gap-2">
+            <span className="w-2 h-2 bg-white" />
+            <span className="text-white font-bold uppercase tracking-wider">
+              {resumeData.personalInfo.name}
+            </span>
+          </div>
+          <p className="text-[11px] text-zinc-400 font-sans">
+            Computer Science • Saint Louis University &apos;27 • Baguio City, Philippines
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-5 text-zinc-400 text-xs">
+          <a
+            href={resumeData.personalInfo.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors"
+          >
+            GitHub
+          </a>
+          <span>/</span>
+          <a
+            href={resumeData.personalInfo.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors"
+          >
+            LinkedIn
+          </a>
+          <span>/</span>
+          <a
+            href={`mailto:${resumeData.personalInfo.email}`}
+            className="hover:text-white transition-colors"
+          >
+            Email
+          </a>
+          <span>/</span>
+          <button
+            onClick={scrollToTop}
+            className="text-zinc-200 hover:text-white flex items-center gap-1 cursor-pointer transition-colors"
+          >
+            <span>Top</span>
+            <ArrowUp className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </div>
     </footer>
   );

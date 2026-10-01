@@ -1,10 +1,9 @@
 "use client";
-
-import React, { memo, useCallback, useEffect, useState } from 'react';
+import React, { useState, useEffect, memo, useCallback } from 'react';
 import { useLenis } from 'lenis/react';
-import { ArrowUpRight } from 'lucide-react';
 import { resumeData } from '@/data/resumeData';
 import { GithubIcon, LinkedinIcon } from '@/components/ui/StudioIcons';
+import { ArrowUpRight } from 'lucide-react';
 
 interface NavItem {
   id: string;
@@ -15,122 +14,173 @@ interface NavItem {
 const NAV_ITEMS: NavItem[] = [
   { id: 'hero', label: 'Overview', number: '00' },
   { id: 'about', label: 'Profile', number: '01' },
-  { id: 'skills', label: 'Skills', number: '02' },
-  { id: 'projects', label: 'Work', number: '03' },
-  { id: 'contact', label: 'Contact', number: '04' },
+  { id: 'projects', label: 'Works', number: '02' },
+  { id: 'contact', label: 'Dispatch', number: '03' },
 ];
 
 export const StudioTopNav = memo(function StudioTopNav() {
-  const [activeSection, setActiveSection] = useState('hero');
+  const [activeSection, setActiveSection] = useState<string>('hero');
+  const [currentTime, setCurrentTime] = useState<string>('');
   const lenis = useLenis();
 
   useEffect(() => {
-    const updateActiveSection = () => {
-      const marker = window.scrollY + 180;
-      for (let index = NAV_ITEMS.length - 1; index >= 0; index -= 1) {
-        const section = document.getElementById(NAV_ITEMS[index].id);
-        if (section && section.offsetTop <= marker) {
-          setActiveSection(NAV_ITEMS[index].id);
-          return;
+    const updateClock = () => {
+      const now = new Date();
+      setCurrentTime(
+        now.toLocaleTimeString('en-US', {
+          timeZone: 'Asia/Manila',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+        }) + ' PHT'
+      );
+    };
+
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY + 200;
+      const sections = NAV_ITEMS.map((item) => document.getElementById(item.id));
+
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const sec = sections[i];
+        if (sec && sec.offsetTop <= scrollY) {
+          setActiveSection(NAV_ITEMS[i].id);
+          break;
         }
       }
     };
 
-    updateActiveSection();
-    window.addEventListener('scroll', updateActiveSection, { passive: true });
-    return () => window.removeEventListener('scroll', updateActiveSection);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const scrollTo = useCallback((id: string) => {
-    const element = document.getElementById(id);
-    if (!element) return;
-
-    if (lenis) {
-      lenis.scrollTo(id === 'hero' ? 0 : element, { offset: id === 'hero' ? 0 : -72, duration: 0.8 });
-    } else {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (id === 'hero') {
+      if (lenis) {
+        lenis.scrollTo(0, { duration: 1.2 });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      return;
+    }
+    const el = document.getElementById(id);
+    if (el) {
+      if (lenis) {
+        lenis.scrollTo(el, { offset: -60, duration: 1.2 });
+      } else {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }, [lenis]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[var(--line)] bg-[var(--background)] px-5 py-4 sm:px-8 lg:px-12">
-      <div className="mx-auto flex max-w-[1320px] items-center justify-between gap-5">
-        <button
-          type="button"
-          onClick={() => scrollTo('hero')}
-          className="shrink-0 text-left text-sm font-semibold tracking-[-0.02em] text-[var(--foreground)] transition-colors hover:text-[var(--accent)]"
-        >
-          {resumeData.personalInfo.name}
-        </button>
+    <header className="sticky top-0 z-50 w-full bg-[#08080a]/95 backdrop-blur-md border-b border-white/10 px-4 sm:px-6 lg:px-12 py-3 transition-all">
+      <div className="w-full max-w-[1720px] mx-auto flex items-center justify-between gap-4">
+        {/* Left: Mark */}
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            onClick={() => scrollTo('hero')}
+            className="text-sm font-extrabold tracking-tight text-white uppercase font-display hover:text-zinc-300 transition-colors cursor-pointer text-left"
+          >
+            {resumeData.personalInfo.name}
+          </button>
+        </div>
 
-        <nav aria-label="Primary navigation" className="hidden items-center gap-5 md:flex">
+        {/* Center: Clean 4-Section Studio Navigation Links */}
+        <nav className="hidden md:flex items-center gap-1 bg-[#0e0e13] p-1 border border-white/10">
           {NAV_ITEMS.map((item) => {
-            const active = activeSection === item.id;
+            const isActive = activeSection === item.id;
             return (
               <button
                 key={item.id}
-                type="button"
                 onClick={() => scrollTo(item.id)}
-                aria-current={active ? 'page' : undefined}
-                className={`group flex items-center gap-2 border-b pb-1 font-mono text-[0.68rem] tracking-[0.08em] transition-colors ${
-                  active
-                    ? 'border-[var(--accent)] text-[var(--foreground)]'
-                    : 'border-transparent text-[var(--muted)] hover:border-[var(--line-strong)] hover:text-[var(--foreground)]'
+                className={`px-3.5 py-1.5 text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer ${
+                  isActive
+                    ? 'bg-white text-black font-bold shadow-sm'
+                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
                 }`}
               >
-                <span className="text-[0.6rem] text-[var(--subtle)]">{item.number}</span>
-                <span>{item.label}</span>
+                <span className="text-[10px] opacity-60 font-mono">
+                  {item.number}
+                </span>
+                <span className="uppercase tracking-wider text-[11px]">
+                  {item.label}
+                </span>
               </button>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="hidden items-center gap-1 sm:flex">
+        {/* Right: location, social links, and actions */}
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0 font-mono text-xs">
+          {/* PHT Clock & Coordinates */}
+          <div className="hidden xl:flex items-center gap-2 text-zinc-400 text-[11px]">
+            <span className="flex items-center gap-1">
+              <span>{currentTime || '12:00:00 PHT'}</span>
+            </span>
+            <span className="text-zinc-700">|</span>
+            <span className="text-zinc-500">16.40°N // 120.59°E</span>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex items-center gap-1">
             <a
               href={resumeData.personalInfo.github}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="GitHub"
-              className="p-2 text-[var(--muted)] transition-colors hover:text-[var(--accent)]"
+              className="p-1.5 text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-colors"
+              title="GitHub"
             >
-              <GithubIcon className="h-4 w-4" />
+              <GithubIcon className="w-4 h-4" />
             </a>
             <a
               href={resumeData.personalInfo.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="LinkedIn"
-              className="p-2 text-[var(--muted)] transition-colors hover:text-[var(--accent)]"
+              className="p-1.5 text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 transition-colors"
+              title="LinkedIn"
             >
-              <LinkedinIcon className="h-4 w-4" />
+              <LinkedinIcon className="w-4 h-4" />
             </a>
           </div>
+
+          {/* Inquire Action Button */}
           <button
-            type="button"
             onClick={() => scrollTo('contact')}
-            className="accent-button inline-flex items-center gap-2 px-3.5 py-2 font-mono text-[0.68rem] font-bold tracking-[0.08em]"
+            className="kokonut-btn-primary py-1.5 px-3 text-xs"
           >
-            Contact
-            <ArrowUpRight className="h-3.5 w-3.5" />
+            <span>Inquire</span>
+            <ArrowUpRight className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      <nav aria-label="Mobile navigation" className="horizontal-scroll mx-auto mt-4 flex max-w-[1320px] gap-4 overflow-x-auto border-t border-[var(--line)] pt-3 md:hidden">
-        {NAV_ITEMS.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => scrollTo(item.id)}
-            className={`shrink-0 font-mono text-[0.66rem] tracking-[0.08em] transition-colors ${
-              activeSection === item.id ? 'text-[var(--accent)]' : 'text-[var(--muted)]'
-            }`}
-          >
-            {item.number} {item.label}
-          </button>
-        ))}
-      </nav>
+      {/* Mobile Horizontal Navigation Strip */}
+      <div className="flex md:hidden overflow-x-auto no-scrollbar gap-1 pt-2.5 mt-2 border-t border-white/5">
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeSection === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => scrollTo(item.id)}
+              className={`px-3 py-1 text-[11px] font-mono whitespace-nowrap transition-all flex items-center gap-1 cursor-pointer shrink-0 ${
+                isActive
+                  ? 'bg-white text-black font-bold'
+                  : 'text-zinc-400 hover:text-white bg-white/5'
+              }`}
+            >
+              <span className="text-[9px] opacity-60">{item.number}</span>
+              <span className="uppercase">{item.label}</span>
+            </button>
+          );
+        })}
+      </div>
     </header>
   );
 });

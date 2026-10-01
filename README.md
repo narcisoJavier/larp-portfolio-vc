@@ -6,8 +6,8 @@ Personal engineering portfolio for Narciso III Javier, a Computer Science studen
 
 - Next.js 16 / React 19 / TypeScript
 - Tailwind CSS v4
-- Framer Motion for restrained transitions
-- Three.js and React Three Fiber for the interactive route proof
+- Framer Motion and Anime.js for tactile transitions
+- Three.js and React Three Fiber for the hero constellation
 - Resend-backed inquiry form
 
 ## Local development
@@ -32,9 +32,9 @@ Open `http://localhost:3000`.
 
 ## Design direction
 
-The live portfolio uses a kinetic midnight studio system: matte blue-black surfaces, Newsreader display type, Geist body text, Geist Mono metadata, cyan focus states, and restrained violet depth accents.
+The live portfolio uses a monochrome studio system: matte dark surfaces, Syne display type, Geist body text, and Geist Mono metadata. Motion is reserved for real project diagrams, the project deck, the skill map, and page transitions.
 
-The Three.js route proof demonstrates deterministic shortest-path routing inspired by the Campus Navigator CS312 project. It includes HTML controls and a non-WebGL fallback so the visual is useful without requiring WebGL.
+The Three.js hero background is a lightweight, paused-when-hidden constellation with a static fallback when WebGL is unavailable.
 
 ## Data and content
 

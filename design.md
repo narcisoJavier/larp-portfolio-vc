@@ -1,53 +1,53 @@
 ---
 colors:
-  canvas: "#08090e"
-  surface: "#10131b"
-  surface_raised: "#161b26"
-  surface_soft: "#202838"
-  ink: "#f2f6ff"
-  ink_muted: "#aeb9cc"
-  ink_subtle: "#77839a"
-  border: "rgba(216, 229, 255, 0.14)"
-  border_strong: "rgba(216, 229, 255, 0.32)"
-  accent: "#67d8ff"
-  accent_secondary: "#a78bfa"
+  canvas: "#08080a"
+  surface: "#0f0f13"
+  surface_raised: "#16161c"
+  surface_soft: "#121217"
+  ink: "#f4f4f5"
+  ink_muted: "#a1a1aa"
+  ink_subtle: "#71717a"
+  border: "rgba(255, 255, 255, 0.07)"
+  border_strong: "rgba(255, 255, 255, 0.22)"
+  accent: "#ffffff"
+  accent_secondary: "#00ADD8"
 typography:
-  display: "Newsreader, Georgia, serif"
+  display: "Syne, Arial, sans-serif"
   body: "Geist, Arial, sans-serif"
   code: "Geist Mono, monospace"
 spacing:
   base_unit: "4px"
-  content_max_width: "1320px"
-  section_padding: "clamp(72px, 9vw, 128px)"
+  content_max_width: "1720px"
+  section_padding: "48px"
 motion:
   ease_standard: "cubic-bezier(0.22, 1, 0.36, 1)"
   duration_fast: "160ms"
   duration_normal: "380ms"
 ---
 
-# Design specification — Refined Dark Studio
+# Design specification — Monochrome Studio
 
 ## Visual identity
 
-The portfolio is an evidence-led engineering portfolio with a tactile, kinetic feel. Midnight surfaces create depth. Newsreader gives the work a human editorial voice. Geist keeps explanations readable. Geist Mono marks only technical metadata.
+The portfolio uses its original monochrome studio language: black matte surfaces, sharp white type, and controlled technical color inside real project diagrams. Syne carries display hierarchy; Geist and Geist Mono keep body copy and metadata readable.
 
-Cool cyan carries focus, action, and selected route state. Violet adds depth inside motion previews only. Color never substitutes for labels, evidence, or controls.
+Motion is reserved for the loading sequence, project carousel, skill graph, real-project visuals, and navigation feedback. It never implies a system status, score, or capability that has not been verified.
 
 ## Composition
 
-- First viewport: name, focus areas, clear actions, and the interactive route proof.
-- About: one narrative, current focus, education, and credentials.
-- Skills: four readable groups sourced from `resumeData`.
-- Work: six verified projects in a draggable spring deck; select a card to reveal evidence without leaving the shelf.
-- Contact: direct channels and one clear inquiry form.
+- First viewport: animated name, focus areas, clear actions, a subtle Three.js constellation, and a rotating reel of real project work.
+- About: an engineering statement, academic background, and credentials.
+- Skills: a force-directed map grounded in `resumeData` and project evidence.
+- Work: six verified projects in a draggable spring deck with expandable evidence.
+- Contact: direct channels and a standard HTML inquiry form.
 
-Avoid decorative HUDs, fake telemetry, and interface labels without a user-facing job. Keep meaningful movement: spring dragging, card selection, project-diagram animation, and clear navigation transitions.
+WebMCP, agent controls, synthetic telemetry, unverified scores, and fabricated live-status labels are absent from the runtime.
 
-## Three.js route proof
+## Motion and 3D
 
-`src/components/3d/PathfindingLab.tsx` visualizes a deterministic graph inspired by the Campus Navigator shortest-path service. Users select start and destination nodes through native controls or click a destination node in the scene. The calculated route appears in both the scene and an accessible route list.
+`src/components/3d/HeroThreeBackground.tsx` is a lightweight, client-only constellation that responds gently to pointer movement. It caps device pixel ratio, pauses when out of view, and uses a static fallback when WebGL is unavailable.
 
-The canvas is client-only, lazy-loaded, capped to a low-power device-pixel ratio, paused outside the viewport where possible, and replaced by a semantic route list when WebGL is unavailable.
+The skill graph and project deck expose controls for keyboard and pointer use. Project claims remain sourced from `projectEvidence` rather than animation labels.
 
 ## Interaction rules
 

@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from 'react';
 
-/** Keeps the hydration render deterministic, then honors the user's motion preference. */
+/** Hydration-safe subscription to the user's motion preference. */
 export function useStableReducedMotion() {
   return useSyncExternalStore(
     (callback) => {
