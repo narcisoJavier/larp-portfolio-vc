@@ -1,54 +1,43 @@
 "use client";
-import React, { memo, useState, useCallback } from 'react';
+
+import React, { memo, useCallback, useState } from 'react';
 import { motion } from 'framer-motion';
-import { resumeData, credentials } from '@/data/resumeData';
-import { containerVariants, cardVariants, headingVariants, fireConfetti } from './shared';
-import {
-  Mail,
-  Phone,
-  Check,
-  X,
-  Copy,
-  ExternalLink,
-  Award,
-  Send,
-  Bot,
-  Sparkles,
-  Loader2,
-} from 'lucide-react';
-import { LinkedinIcon } from '@/components/ui/StudioIcons';
-import { dispatchWebMCPToolCall } from '@/lib/webmcpEvents';
+import { Check, Copy, ExternalLink, Loader2, Mail, Send, X } from 'lucide-react';
+import { resumeData } from '@/data/resumeData';
 import { submitInquiry } from '@/lib/inquiryClient';
+import { cardVariants, containerVariants, headingVariants } from './shared';
+import { LinkedinIcon } from '@/components/ui/StudioIcons';
+
+const INITIAL_FORM = {
+  sender_name: '',
+  sender_email: '',
+  subject: '',
+  message: '',
+  website: '',
+};
 
 export const ContactSection = memo(function ContactSection() {
   const [copiedField, setCopiedField] = useState<string | null>(null);
   const [inquiryStatus, setInquiryStatus] = useState<string | null>(null);
   const [inquiryError, setInquiryError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [formState, setFormState] = useState({
-    sender_name: '',
-    sender_email: '',
-    subject: '',
-    message: '',
-    website: '',
-  });
+  const [formState, setFormState] = useState(INITIAL_FORM);
 
   const copyToClipboard = useCallback((text: string, label: string) => {
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(text);
+      void navigator.clipboard.writeText(text);
     }
     setCopiedField(label);
-    fireConfetti();
-    setTimeout(() => setCopiedField(null), 2500);
+    window.setTimeout(() => setCopiedField(null), 2200);
   }, []);
 
-  const handleInquirySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleInquirySubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (isSubmitting) return;
 
     if (!formState.sender_name || !formState.sender_email || !formState.subject || !formState.message) {
       setInquiryError(true);
-      setInquiryStatus('Please fill in all fields.');
+      setInquiryStatus('Please complete all required fields.');
       return;
     }
 
@@ -57,345 +46,175 @@ export const ContactSection = memo(function ContactSection() {
     setInquiryStatus(null);
 
     try {
-      const result = await submitInquiry(formState);
-      dispatchWebMCPToolCall({
-        tool: 'send_inquiry',
-        input: formState as unknown as Record<string, unknown>,
-        result,
-        summary: `Inquiry sent by ${formState.sender_name}: "${formState.subject}"`,
-      });
-
-      fireConfetti();
-      setInquiryError(false);
-      setInquiryStatus('Inquiry sent successfully.');
-      setFormState({ sender_name: '', sender_email: '', subject: '', message: '', website: '' });
-      setTimeout(() => setInquiryStatus(null), 5000);
+      await submitInquiry(formState);
+      setInquiryStatus('Message sent. Thank you.');
+      setFormState(INITIAL_FORM);
+      window.setTimeout(() => setInquiryStatus(null), 5000);
     } catch (error) {
       setInquiryError(true);
-      setInquiryStatus(error instanceof Error ? error.message : 'The inquiry could not be sent.');
+      setInquiryStatus(error instanceof Error ? error.message : 'The message could not be sent.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const updateField = (field: keyof typeof INITIAL_FORM, value: string) => {
+    setFormState((previous) => ({ ...previous, [field]: value }));
+  };
+
   return (
-    <section id="contact" className="scroll-mt-20 w-full py-12 border-b border-white/10">
+    <section id="contact" className="portfolio-section scroll-mt-20">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.05 }}
-        className="w-full space-y-8"
+        viewport={{ once: true, amount: 0.12 }}
+        className="space-y-10"
       >
-        {/* Studio Section Header */}
-        <motion.div
-          variants={headingVariants}
-          className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 gap-4"
-        >
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 uppercase tracking-widest">
-              <span>03 // DISPATCH</span>
-              <span className="text-zinc-600">/</span>
-              <span>GET IN TOUCH &amp; INQUIRE</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-white uppercase font-display tracking-tight">
-              Contact &amp; Connect
-            </h2>
+        <motion.div variants={headingVariants} className="flex flex-col gap-4 border-b border-[var(--line)] pb-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker mb-3">04 / Contact</p>
+            <h2 className="font-display text-5xl leading-none text-[var(--foreground)] sm:text-6xl">Let&apos;s make something useful.</h2>
           </div>
-
-          <span className="text-xs font-mono text-zinc-400">
-            [OPEN FOR SOFTWARE &amp; SYSTEMS OPPORTUNITIES // 2026]
-          </span>
+          <p className="max-w-sm text-sm leading-6 text-[var(--muted)] md:text-right">Open to software engineering, systems, and technical collaboration opportunities.</p>
         </motion.div>
 
-        {/* 2-Column Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Left Column: Direct Channels & Declarative Form (7 cols) */}
-          <motion.div variants={cardVariants} className="lg:col-span-7 kokonut-card-glow p-6 sm:p-8 space-y-6">
-            <div className="studio-corner-tl" />
-            <div className="studio-corner-br" />
-            <div className="kokonut-spotlight-layer" />
-
-            <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-3 text-xs font-mono">
-              <span className="text-white font-bold uppercase tracking-wider flex items-center gap-2">
-                <Send className="w-3.5 h-3.5" />
-                <span>DIRECT INQUIRIES</span>
-              </span>
-              <span className="inline-flex items-center gap-1.5 text-zinc-300 font-bold">
-                EMAIL ROUTE
-              </span>
-            </div>
-
-            <p className="relative z-10 text-sm text-zinc-300 font-sans leading-relaxed">
-              Seeking software engineering, backend systems, and technical collaboration roles. Reach out
-              directly or use the form below for opportunities and technical collaboration.
-            </p>
-
-            {/* Direct Copyable Rows */}
-            <div className="relative z-10 space-y-3 pt-1">
-              {/* Email */}
-              <div className="flex items-center justify-between p-3.5 bg-[#121217] border border-white/10 hover:border-white/25 transition-all">
-                <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="p-2 bg-white/5 border border-white/10 text-white">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
-                      Email
-                    </div>
-                    <div className="text-xs sm:text-sm font-bold text-white font-mono truncate">
-                      {resumeData.personalInfo.email}
+        <div className="grid gap-8 lg:grid-cols-[0.72fr_1.28fr]">
+          <motion.aside variants={cardVariants} className="space-y-8">
+            <div>
+              <p className="section-kicker mb-4">Direct channels</p>
+              <div className="space-y-3">
+                <div className="surface-panel flex items-center justify-between gap-4 p-4">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <Mail className="h-4 w-4 shrink-0 text-[var(--accent)]" />
+                    <div className="min-w-0">
+                      <p className="font-mono text-[0.66rem] text-[var(--muted)]">Email</p>
+                      <p className="truncate text-sm text-[var(--foreground)]">{resumeData.personalInfo.email}</p>
                     </div>
                   </div>
-                </div>
-
-                <button
-                  onClick={() => copyToClipboard(resumeData.personalInfo.email, 'email')}
-                  className={`px-3.5 py-1.5 text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    copiedField === 'email'
-                      ? 'bg-emerald-400 text-black'
-                      : 'bg-white hover:bg-zinc-200 text-black'
-                  }`}
-                >
-                  {copiedField === 'email' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedField === 'email' ? 'Copied' : 'Copy'}</span>
-                </button>
-              </div>
-
-              {/* Phone */}
-              <div className="flex items-center justify-between p-3.5 bg-[#121217] border border-white/10 hover:border-white/25 transition-all">
-                <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="p-2 bg-white/5 border border-white/10 text-white">
-                    <Phone className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
-                      Phone / Mobile
-                    </div>
-                    <div className="text-xs sm:text-sm font-bold text-white font-mono truncate">
-                      {resumeData.personalInfo.phone}
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => copyToClipboard(resumeData.personalInfo.phone, 'phone')}
-                  className={`px-3.5 py-1.5 text-xs font-mono font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                    copiedField === 'phone'
-                      ? 'bg-emerald-400 text-black'
-                      : 'bg-white hover:bg-zinc-200 text-black'
-                  }`}
-                >
-                  {copiedField === 'phone' ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                  <span>{copiedField === 'phone' ? 'Copied' : 'Copy'}</span>
-                </button>
-              </div>
-
-              {/* LinkedIn */}
-              <div className="flex items-center justify-between p-3.5 bg-[#121217] border border-white/10 hover:border-white/25 transition-all">
-                <div className="flex items-center gap-3.5 min-w-0">
-                  <div className="p-2 bg-white/5 border border-white/10 text-white">
-                    <LinkedinIcon className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
-                      LinkedIn
-                    </div>
-                    <div className="text-xs sm:text-sm font-bold text-white font-mono truncate">
-                      linkedin.com/in/narcisoiii-javier
-                    </div>
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => copyToClipboard(resumeData.personalInfo.email, 'email')}
+                    className="inline-flex min-h-10 shrink-0 items-center gap-2 border border-[var(--line-strong)] px-3 font-mono text-xs text-[var(--foreground)] transition-colors hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                  >
+                    {copiedField === 'email' ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                    {copiedField === 'email' ? 'Copied' : 'Copy'}
+                  </button>
                 </div>
 
                 <a
                   href={resumeData.personalInfo.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-3.5 py-1.5 text-xs font-mono font-bold bg-[#181820] hover:bg-zinc-800 text-white border border-white/20 transition-all flex items-center gap-1.5 cursor-pointer"
+                  className="surface-panel flex min-h-[4.5rem] items-center justify-between gap-4 p-4 transition-colors hover:border-[var(--accent)]"
                 >
-                  <span>Connect</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span className="flex items-center gap-3">
+                    <LinkedinIcon className="h-4 w-4 text-[var(--accent)]" />
+                    <span>
+                      <span className="block font-mono text-[0.66rem] text-[var(--muted)]">LinkedIn</span>
+                      <span className="block text-sm text-[var(--foreground)]">Connect professionally</span>
+                    </span>
+                  </span>
+                  <ExternalLink className="h-4 w-4 shrink-0 text-[var(--muted)]" />
                 </a>
               </div>
             </div>
 
-            {/* Declarative WebMCP Form (W3C Standard) */}
-            <div className="relative z-10 pt-2 border-t border-white/10">
-              <div className="flex items-center justify-between pb-3 text-xs font-mono">
-                <span className="text-white font-bold uppercase tracking-wider flex items-center gap-2">
-                  <Bot className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>CONTACT FORM // WebMCP ENABLED</span>
-                </span>
-                <span className="text-[10px] text-zinc-400 font-mono">
-                  [AGENT DECLARATIVE API]
-                </span>
+            <div className="border-t border-[var(--line)] pt-6">
+              <p className="section-kicker mb-4">Based in</p>
+              <p className="font-display text-3xl text-[var(--foreground)]">{resumeData.personalInfo.location}</p>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">Remote, hybrid, or on-site collaboration considered.</p>
+            </div>
+          </motion.aside>
+
+          <motion.div variants={cardVariants} className="surface-panel p-6 sm:p-8">
+            <div className="mb-7 flex items-end justify-between gap-4 border-b border-[var(--line)] pb-4">
+              <div>
+                <p className="section-kicker mb-2">Send a message</p>
+                <p className="text-sm text-[var(--muted)]">Tell me what you are building and where I can help.</p>
               </div>
+              <span className="hidden font-mono text-xs text-[var(--subtle)] sm:block">Reply by email</span>
+            </div>
 
-              <form
-                id="inquiry-form"
-                onSubmit={handleInquirySubmit}
-                toolname="send_inquiry"
-                tooldescription="Send a professional inquiry, role opportunity, or message to Narciso III Javier"
-                toolautosubmit="true"
-                className="space-y-3 text-xs font-mono"
-              >
-                <input
-                  name="website"
-                  value={formState.website}
-                  onChange={(e) => setFormState((p) => ({ ...p, website: e.target.value }))}
-                  tabIndex={-1}
-                  autoComplete="off"
-                  aria-hidden="true"
-                  className="absolute -left-[9999px] h-px w-px opacity-0"
-                />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label htmlFor="inquiry-sender-name" className="block text-[10px] uppercase text-zinc-400 mb-1">
-                      Your Name / Org
-                    </label>
-                    <input
-                      id="inquiry-sender-name"
-                      name="sender_name"
-                      value={formState.sender_name}
-                      onChange={(e) => setFormState((p) => ({ ...p, sender_name: e.target.value }))}
-                      placeholder="e.g. Alex Morgan / Tech Co"
-                      toolparamdescription="Your full name or recruiting organization"
-                      required
-                      className="w-full bg-[#121218] border border-white/15 text-white p-2.5 font-mono text-xs focus:outline-none focus:border-white transition-colors"
-                    />
-                  </div>
+            <form onSubmit={handleInquirySubmit} className="space-y-5">
+              <input
+                name="website"
+                value={formState.website}
+                onChange={(event) => updateField('website', event.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute -left-[9999px] h-px w-px opacity-0"
+              />
 
-                  <div>
-                    <label htmlFor="inquiry-sender-email" className="block text-[10px] uppercase text-zinc-400 mb-1">
-                      Your Email
-                    </label>
-                    <input
-                      id="inquiry-sender-email"
-                      name="sender_email"
-                      type="email"
-                      value={formState.sender_email}
-                      onChange={(e) => setFormState((p) => ({ ...p, sender_email: e.target.value }))}
-                      placeholder="alex@tech.co"
-                      toolparamdescription="Your contact email address for correspondence"
-                      required
-                      className="w-full bg-[#121218] border border-white/15 text-white p-2.5 font-mono text-xs focus:outline-none focus:border-white transition-colors"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label htmlFor="inquiry-subject" className="block text-[10px] uppercase text-zinc-400 mb-1">
-                    Subject Line
-                  </label>
+              <div className="grid gap-5 sm:grid-cols-2">
+                <label className="grid gap-2 text-sm text-[var(--muted)]">
+                  Your name / organization
                   <input
-                    id="inquiry-subject"
-                    name="subject"
-                    value={formState.subject}
-                    onChange={(e) => setFormState((p) => ({ ...p, subject: e.target.value }))}
-                    placeholder="e.g. Systems & Go Developer Role"
-                    toolparamdescription="Subject line describing the inquiry, role, or proposal"
+                    name="sender_name"
+                    value={formState.sender_name}
+                    onChange={(event) => updateField('sender_name', event.target.value)}
+                    placeholder="Alex Morgan / Tech Co"
                     required
-                    className="w-full bg-[#121218] border border-white/15 text-white p-2.5 font-mono text-xs focus:outline-none focus:border-white transition-colors"
+                    className="min-h-12 border border-[var(--line-strong)] bg-[var(--surface-raised)] px-3 text-base text-[var(--foreground)] placeholder:text-[var(--subtle)]"
                   />
-                </div>
-
-                <div>
-                  <label htmlFor="inquiry-message" className="block text-[10px] uppercase text-zinc-400 mb-1">
-                    Message
-                  </label>
-                  <textarea
-                    id="inquiry-message"
-                    name="message"
-                    value={formState.message}
-                    onChange={(e) => setFormState((p) => ({ ...p, message: e.target.value }))}
-                    placeholder="Details about your project, team, or opportunity..."
-                    rows={3}
-                    toolparamdescription="Detailed message body"
+                </label>
+                <label className="grid gap-2 text-sm text-[var(--muted)]">
+                  Email address
+                  <input
+                    name="sender_email"
+                    type="email"
+                    value={formState.sender_email}
+                    onChange={(event) => updateField('sender_email', event.target.value)}
+                    placeholder="alex@tech.co"
                     required
-                    className="w-full bg-[#121218] border border-white/15 text-white p-2.5 font-mono text-xs focus:outline-none focus:border-white transition-colors resize-none"
+                    className="min-h-12 border border-[var(--line-strong)] bg-[var(--surface-raised)] px-3 text-base text-[var(--foreground)] placeholder:text-[var(--subtle)]"
                   />
-                </div>
-
-                <div className="flex items-center justify-between pt-1">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="px-4 py-2 bg-white text-black font-bold uppercase tracking-wider text-xs hover:bg-zinc-200 disabled:opacity-60 transition-all flex items-center gap-2 cursor-pointer shadow-md"
-                  >
-                    {isSubmitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />}
-                    <span>{isSubmitting ? 'Sending...' : 'Send Message'}</span>
-                  </button>
-
-                  {inquiryStatus && (
-                    <span role="status" aria-live="polite" className={`${inquiryError ? 'text-rose-300' : 'text-emerald-400'} text-xs font-mono flex items-center gap-1.5`}>
-                      {inquiryError ? <X className="w-3.5 h-3.5" /> : <Sparkles className="w-3.5 h-3.5" />}
-                      <span>{inquiryStatus}</span>
-                    </span>
-                  )}
-                </div>
-              </form>
-            </div>
-          </motion.div>
-
-          {/* Right Column: Dispatch Specs & Accreditations (5 cols) */}
-          <motion.div variants={cardVariants} className="lg:col-span-5 space-y-4">
-            {/* Dispatch Specs Card */}
-            <div className="kokonut-card-glow p-6 space-y-4">
-              <div className="studio-corner-tl" />
-              <div className="studio-corner-br" />
-              <div className="kokonut-spotlight-layer" />
-
-              <div className="relative z-10 flex items-center justify-between text-xs font-mono border-b border-white/10 pb-3">
-                <span className="text-white font-bold uppercase tracking-wider">
-                  CONTACT DETAILS
-                </span>
-                <span className="text-zinc-500">{resumeData.personalInfo.location}</span>
+                </label>
               </div>
 
-              <div className="relative z-10 space-y-2.5 text-xs font-mono">
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-zinc-400">Response Time</span>
-                  <span className="text-white font-bold">Best effort</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-zinc-400">Timezone</span>
-                  <span className="text-zinc-200">GMT+8 (PHT)</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-zinc-400">Work Model</span>
-                  <span className="text-zinc-200">Remote / Hybrid / On-Site</span>
-                </div>
-                <div className="flex justify-between py-1">
-                  <span className="text-zinc-400">Affiliation</span>
-                  <span className="text-white font-bold font-mono">Saint Louis University &apos;27</span>
-                </div>
-              </div>
-            </div>
+              <label className="grid gap-2 text-sm text-[var(--muted)]">
+                Subject
+                <input
+                  name="subject"
+                  value={formState.subject}
+                  onChange={(event) => updateField('subject', event.target.value)}
+                  placeholder="A systems or software opportunity"
+                  required
+                  className="min-h-12 border border-[var(--line-strong)] bg-[var(--surface-raised)] px-3 text-base text-[var(--foreground)] placeholder:text-[var(--subtle)]"
+                />
+              </label>
 
-            {/* Accreditations Badges */}
-            <div className="kokonut-card-glow p-6 space-y-3">
-              <div className="studio-corner-tl" />
-              <div className="studio-corner-br" />
-              <div className="kokonut-spotlight-layer" />
+              <label className="grid gap-2 text-sm text-[var(--muted)]">
+                Message
+                <textarea
+                  name="message"
+                  value={formState.message}
+                  onChange={(event) => updateField('message', event.target.value)}
+                  placeholder="A few details about the project, team, or opportunity..."
+                  rows={6}
+                  required
+                  className="resize-y border border-[var(--line-strong)] bg-[var(--surface-raised)] px-3 py-3 text-base leading-7 text-[var(--foreground)] placeholder:text-[var(--subtle)]"
+                />
+              </label>
 
-              <div className="relative z-10 text-xs font-bold text-white uppercase tracking-wider font-mono border-b border-white/10 pb-2">
-                LISTED CREDENTIALS
+              <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--line)] pt-5">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="accent-button inline-flex min-h-12 items-center gap-2 px-4 font-mono text-xs font-bold tracking-[0.08em]"
+                >
+                  {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                  {isSubmitting ? 'Sending…' : 'Send message'}
+                </button>
+                {inquiryStatus && (
+                  <p role="status" aria-live="polite" className={`flex items-center gap-2 text-sm ${inquiryError ? 'text-[var(--danger)]' : 'text-[var(--accent)]'}`}>
+                    {inquiryError ? <X className="h-4 w-4" /> : <Check className="h-4 w-4" />}
+                    {inquiryStatus}
+                  </p>
+                )}
               </div>
-
-              <div className="relative z-10 space-y-3 pt-1">
-                {credentials.map((cred) => (
-                  <div key={cred.title} className="flex items-center gap-3 text-xs">
-                    <div className="p-1.5 bg-white/5 border border-white/10 text-white">
-                      <Award className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="min-w-0 font-mono">
-                      <div className="font-semibold text-white truncate">{cred.title}</div>
-                      <div className="text-[11px] text-zinc-400 truncate">{cred.description}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+            </form>
           </motion.div>
         </div>
       </motion.div>

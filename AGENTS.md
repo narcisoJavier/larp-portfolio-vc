@@ -21,19 +21,17 @@ npm ci --legacy-peer-deps           # Install for Vercel deploy
 
 ## Architecture (non-obvious)
 
-- **All interactive components** use `"use client"` — sections, 3D particles, WebMCP HUD, etc.
+- **All interactive components** use `"use client"` — sections, the 3D route demo, and form controls.
 - **Every section** wrapped with `memo()` — don't skip this.
 - **Framer Motion variants** live in `src/components/sections/shared.ts` — always import from there, never inline variants.
 - **Data source**: `src/data/resumeData.ts` is the single source of truth. Also exports `credentials` array used by ContactSection and FooterSection. **Content can be overridden at runtime** via `localStorage['resume-content-overrides']` — the `/admin` page and `useContent` hook handle this.
 - **Loading screen** extracted to `src/components/ui/LoadingScreen.tsx` — manages own state and calls `onComplete` callback when settled. `page.tsx` only coordinates settled content.
 - **Chatbot system prompt** is built dynamically in `src/app/api/chat/route.ts:buildPortfolioContext()` from `resumeData`. If you change resume data, the chatbot personality changes too.
-- **WebGL Background**: `src/components/3d/HeroThreeBackground.tsx` — lightweight constellation particle field.
+- **Three.js proof**: `src/components/3d/PathfindingLab.tsx` — lightweight route visual tied to the Campus Navigator project.
 - **SWR pattern**: Data fetching hooks (`useGitHubAnalyzer`) pass `isInView ? url : null` to defer fetching until the section scrolls into view.
-- **WebMCP Integration**:
-  - `src/lib/webmcp.ts` — Registers 11 tools into `document.modelContext` with `readOnlyHint` annotations.
-  - `src/lib/webmcpEvents.ts` — Live UI Event Bus for real-time human-agent visual synchronization (skill highlights, project focus, telemetry wave).
-  - `src/components/WebMCPAgentHUD.tsx` — Floating live agent activity pill and judge simulator drawer.
-  - `src/components/sections/ContactSection.tsx` — W3C Declarative HTML Form attributes (`toolname="send_inquiry"`, `toolautosubmit="true"`).
+- **Three.js Route Proof**:
+  - `src/components/3d/PathfindingLab.tsx` — Accessible client-only route visual based on the Campus Navigator Dijkstra project.
+  - Uses deterministic local graph data, keyboard controls, WebGL fallback, and reduced-motion-safe rendering.
 
 ## Framework Versions & Quirks
 
@@ -41,7 +39,7 @@ npm ci --legacy-peer-deps           # Install for Vercel deploy
 - React 19 — stable, no special migration concerns
 - Tailwind CSS v4 — uses `@tailwindcss/postcss` (not v3 `tailwindcss` package)
 - TypeScript strict mode, `@/*` path alias maps to `./src/*`
-- Google Fonts: Syne, Geist (sans), Geist Mono — loaded via `next/font` in `layout.tsx`
+- Google Fonts: Newsreader, Geist (sans), Geist Mono — loaded via `next/font` in `layout.tsx`
 
 ## Key Constraints (agent often misses)
 

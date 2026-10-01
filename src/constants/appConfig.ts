@@ -75,9 +75,6 @@ export const STORAGE_KEYS = {
   // User preferences
   THEME: 'theme_preference',
   
-  // WebMCP Inquiries
-  WEBMCP_INQUIRIES: 'webmcp-inquiries',
-  
   // Content Overrides
   CONTENT_OVERRIDES: 'resume-content-overrides',
   
@@ -168,7 +165,6 @@ export const DEV_CONFIG = {
 
 // ==================== Feature Flags ====================
 export const FEATURES = {
-  WEBMCP_ENABLED: true,
   CHATBOT_ENABLED: true,
   GITHUB_INTEGRATION_ENABLED: true,
 };

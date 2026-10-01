@@ -11,7 +11,7 @@ import {
 
 export const Sections = memo(function Sections() {
   return (
-    <div className="relative z-10 flex flex-col w-full max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-12 space-y-12">
+    <div className="relative z-10 mx-auto flex w-full min-w-0 max-w-[1320px] flex-col space-y-20 px-5 sm:px-8 lg:px-12">
       <HeroSection />
       <AboutSection />
       <SkillsSection />

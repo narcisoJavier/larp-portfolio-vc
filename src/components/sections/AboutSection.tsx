@@ -1,177 +1,89 @@
 "use client";
+
 import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { resumeData, credentials } from '@/data/resumeData';
-import { containerVariants, cardVariants, headingVariants } from './shared';
-import {
-  Award,
-  Cpu,
-  Layers,
-  Gamepad2,
-} from 'lucide-react';
+import { cardVariants, containerVariants, headingVariants } from './shared';
 
 export const AboutSection = memo(function AboutSection() {
   return (
-    <section id="about" className="scroll-mt-20 w-full py-12 border-b border-white/10">
+    <section id="about" className="portfolio-section scroll-mt-20">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.05 }}
-        className="w-full space-y-8"
+        viewport={{ once: true, amount: 0.15 }}
+        className="space-y-10"
       >
-        {/* Studio Section Header */}
-        <motion.div
-          variants={headingVariants}
-          className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 gap-4"
-        >
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 uppercase tracking-widest">
-              <span>01 // PROFILE</span>
-              <span className="text-zinc-600">/</span>
-              <span>BACKGROUND &amp; FOCUS</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-white uppercase font-display tracking-tight">
-              About &amp; Focus
-            </h2>
+        <motion.div variants={headingVariants} className="flex flex-col gap-4 border-b border-[var(--line)] pb-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker mb-3">01 / Profile</p>
+            <h2 className="font-display text-5xl leading-none text-[var(--foreground)] sm:text-6xl">About and focus</h2>
           </div>
-
-          <span className="text-xs font-mono text-zinc-400">
-            [SAINT LOUIS UNIVERSITY // CS &apos;27]
-          </span>
+          <p className="max-w-xs text-sm leading-6 text-[var(--muted)] md:text-right">Saint Louis University / B.S. Computer Science / Class of 2027</p>
         </motion.div>
 
-        {/* 2-Column Studio Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Left Column: Narrative Bio (7 cols) */}
-          <motion.div variants={cardVariants} className="lg:col-span-7 space-y-5">
-            <div className="kokonut-card-glow p-6 sm:p-8 space-y-5">
-              <div className="studio-corner-tl" />
-              <div className="studio-corner-br" />
-              <div className="kokonut-spotlight-layer" />
-
-              <div className="relative z-10 flex items-center justify-between text-xs font-mono text-zinc-400 border-b border-white/10 pb-3">
-                <span className="text-white font-bold uppercase tracking-wider">
-                  ENGINEERING STATEMENT
-                </span>
-                <span>SWE &amp; GAME DEV</span>
-              </div>
-
-              <div className="relative z-10 space-y-4 text-zinc-300 font-sans text-sm sm:text-base leading-relaxed">
-                <p>
-                  I am a Computer Science student at{' '}
-                  <strong className="text-white font-semibold">
-                    {resumeData.education.university}
-                  </strong>{' '}
-                  in Baguio City, focusing on software engineering, backend systems, and interactive
-                  game mechanics.
-                </p>
-                <p className="text-zinc-400 text-sm">
-                  I enjoy building practical tools that solve real problems — whether that means
-                  connecting to remote servers on mobile via SSH, designing algorithm-backed
-                  microservices in Go and Docker, automating repetitive desktop workflows with Python,
-                  or programming responsive character mechanics in Unity 3D.
-                </p>
-              </div>
-
-              {/* Specialization Pillars */}
-              <div className="relative z-10 grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                <div className="p-3.5 bg-[#121217] border border-white/10 space-y-1">
-                  <div className="flex items-center gap-2 text-white text-xs font-mono font-bold">
-                    <Cpu className="w-3.5 h-3.5" />
-                    <span>Systems</span>
-                  </div>
-                  <p className="text-[11px] text-zinc-400 font-sans leading-normal">
-                    Go microservices, Docker Compose, and remote Linux containers.
-                  </p>
-                </div>
-
-                <div className="p-3.5 bg-[#121217] border border-white/10 space-y-1">
-                  <div className="flex items-center gap-2 text-white text-xs font-mono font-bold">
-                    <Gamepad2 className="w-3.5 h-3.5" />
-                    <span>Game Dev</span>
-                  </div>
-                  <p className="text-[11px] text-zinc-400 font-sans leading-normal">
-                    Unity 3D gameplay physics, C#, state logic, and player mechanics.
-                  </p>
-                </div>
-
-                <div className="p-3.5 bg-[#121217] border border-white/10 space-y-1">
-                  <div className="flex items-center gap-2 text-white text-xs font-mono font-bold">
-                    <Layers className="w-3.5 h-3.5" />
-                    <span>Tooling</span>
-                  </div>
-                  <p className="text-[11px] text-zinc-400 font-sans leading-normal">
-                    Python desktop automation, PyQt6, and GIS data visualization.
-                  </p>
-                </div>
-              </div>
+        <div className="grid gap-px border border-[var(--line)] bg-[var(--line)] lg:grid-cols-[1.25fr_0.75fr]">
+          <motion.article variants={cardVariants} className="bg-[var(--surface)] p-6 sm:p-10">
+            <p className="max-w-2xl font-display text-3xl leading-[1.12] text-[var(--foreground)] sm:text-4xl">
+              I like software that makes complex systems easier to understand and easier to use.
+            </p>
+            <div className="mt-8 max-w-2xl space-y-5 text-base leading-8 text-[var(--muted)]">
+              <p>
+                I am a Computer Science student in Baguio City, focused on software engineering, backend systems, and interactive game mechanics.
+              </p>
+              <p>
+                My work moves between remote server tools, algorithm-backed services, GIS applications, desktop automation, and responsive Unity prototypes. I care about clear boundaries, useful feedback, and software that feels deliberate.
+              </p>
             </div>
+          </motion.article>
+
+          <motion.aside variants={cardVariants} className="bg-[var(--surface-raised)] p-6 sm:p-10">
+            <p className="section-kicker mb-6">Current focus</p>
+            <ul className="divide-y divide-[var(--line)]">
+              {[
+                ['Systems', 'Go services, Docker, Linux, and reliable data flow.'],
+                ['Game development', 'Unity gameplay, physics, C#, and player feedback.'],
+                ['Tooling', 'Python automation, PyQt6, GIS, and practical interfaces.'],
+              ].map(([title, description]) => (
+                <li key={title} className="py-4 first:pt-0 last:pb-0">
+                  <p className="text-base font-semibold text-[var(--foreground)]">{title}</p>
+                  <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{description}</p>
+                </li>
+              ))}
+            </ul>
+          </motion.aside>
+        </div>
+
+        <div className="grid gap-8 lg:grid-cols-[1fr_1fr]">
+          <motion.div variants={cardVariants} className="surface-panel p-6 sm:p-8">
+            <p className="section-kicker mb-6">Education</p>
+            <dl className="space-y-4 text-sm">
+              <div className="flex items-start justify-between gap-6 border-b border-[var(--line)] pb-4">
+                <dt className="text-[var(--muted)]">University</dt>
+                <dd className="text-right font-semibold text-[var(--foreground)]">{resumeData.education.university}</dd>
+              </div>
+              <div className="flex items-start justify-between gap-6 border-b border-[var(--line)] pb-4">
+                <dt className="text-[var(--muted)]">Degree</dt>
+                <dd className="max-w-[15rem] text-right font-semibold text-[var(--foreground)]">{resumeData.education.degree}</dd>
+              </div>
+              <div className="flex items-start justify-between gap-6">
+                <dt className="text-[var(--muted)]">Location</dt>
+                <dd className="text-right font-semibold text-[var(--foreground)]">{resumeData.personalInfo.location}</dd>
+              </div>
+            </dl>
           </motion.div>
 
-          {/* Right Column: Academic Specs & Credentials (5 cols) */}
-          <motion.div variants={cardVariants} className="lg:col-span-5 space-y-4">
-            {/* Academic Specification Card */}
-            <div className="kokonut-card-glow p-6 space-y-4">
-              <div className="studio-corner-tl" />
-              <div className="studio-corner-br" />
-              <div className="kokonut-spotlight-layer" />
-
-              <div className="relative z-10 flex items-center justify-between text-xs font-mono border-b border-white/10 pb-3">
-                <span className="text-white font-bold uppercase tracking-wider">
-                  ACADEMIC BACKGROUND
-                </span>
-                <span className="text-zinc-500">DECLARED</span>
-              </div>
-
-              <div className="relative z-10 space-y-2.5 text-xs font-mono">
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-zinc-400">University</span>
-                  <span className="text-white font-semibold">{resumeData.education.university}</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-zinc-400">Degree</span>
-                  <span className="text-white font-semibold">{resumeData.education.degree}</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-zinc-400">Track</span>
-                  <span className="text-white font-semibold">Systems &amp; Game Development</span>
-                </div>
-                <div className="flex justify-between py-1 border-b border-white/5">
-                  <span className="text-zinc-400">Cohort</span>
-                  <span className="text-zinc-300">Class of {resumeData.education.classOf}</span>
-                </div>
-                <div className="flex justify-between py-1">
-                  <span className="text-zinc-400">Location Base</span>
-                  <span className="text-zinc-300">{resumeData.personalInfo.location}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Listed Credentials */}
-            <div className="space-y-2.5">
-              {credentials.map((cred) => (
-                <div
-                  key={cred.title}
-                  className="kokonut-card-glow p-3.5 flex items-center gap-3.5 group"
-                >
-                  <div className="studio-corner-tl" />
-                  <div className="studio-corner-br" />
-                  <div className="kokonut-spotlight-layer" />
-                  <div className="relative z-10 p-2 bg-white/5 border border-white/10 text-white">
-                    <Award className="w-4 h-4" />
-                  </div>
-                  <div className="relative z-10 min-w-0">
-                    <div className="font-bold text-white text-xs font-mono uppercase tracking-wide">
-                      {cred.title}
-                    </div>
-                    <div className="text-[11px] text-zinc-400 font-sans mt-0.5">
-                      {cred.description}
-                    </div>
-                  </div>
-                </div>
+          <motion.div variants={cardVariants} className="surface-panel p-6 sm:p-8">
+            <p className="section-kicker mb-6">Credentials</p>
+            <ul className="space-y-4">
+              {credentials.map((credential) => (
+                <li key={credential.title} className="border-b border-[var(--line)] pb-4 last:border-b-0 last:pb-0">
+                  <p className="text-sm font-semibold text-[var(--foreground)]">{credential.title}</p>
+                  <p className="mt-1 text-sm leading-6 text-[var(--muted)]">{credential.description}</p>
+                </li>
               ))}
-            </div>
+            </ul>
           </motion.div>
         </div>
       </motion.div>

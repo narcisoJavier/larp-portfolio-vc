@@ -2,64 +2,51 @@
 
 import React, { memo } from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from '@/hooks/useInView';
-import { containerVariants, headingVariants, cardVariants, type UnifiedProject } from './shared';
-import { ObsidianSkillGraph } from '@/components/ui/ObsidianSkillGraph';
 import { resumeData } from '@/data/resumeData';
-import { getProjectEvidence } from '@/data/projectEvidence';
+import { cardVariants, containerVariants, headingVariants } from './shared';
 
-interface SkillsSectionProps {
-  allProjects?: UnifiedProject[];
-}
+const SKILL_GROUPS = [
+  { key: 'programming', label: 'Programming languages' },
+  { key: 'frameworks', label: 'Frameworks and tools' },
+  { key: 'infrastructure', label: 'Infrastructure' },
+  { key: 'coreCompetencies', label: 'Core competencies' },
+] as const;
 
-const DEFAULT_PROJECTS: UnifiedProject[] = resumeData.projects.map((p) => ({
-  title: p.title,
-  description: p.description,
-  source: 'resume' as const,
-  role: p.role,
-  language: getProjectEvidence(p.id)?.technologyTags[0] || 'TypeScript',
-}));
-
-export const SkillsSection = memo(function SkillsSection({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  allProjects = DEFAULT_PROJECTS,
-}: SkillsSectionProps) {
-  const { ref } = useInView({ rootMargin: '200px', once: true });
-
+export const SkillsSection = memo(function SkillsSection() {
   return (
-    <section id="skills" ref={ref} className="scroll-mt-20 w-full py-12 border-b border-white/10">
+    <section id="skills" className="portfolio-section scroll-mt-20">
       <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.05 }}
-        className="w-full space-y-6"
+        viewport={{ once: true, amount: 0.15 }}
+        className="space-y-10"
       >
-        {/* Studio Section Header */}
-        <motion.div
-          variants={headingVariants}
-          className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-4 gap-4"
-        >
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-400 uppercase tracking-widest">
-              <span>03 // ARCHITECTURE &amp; RUNTIMES</span>
-              <span className="text-zinc-600">/</span>
-              <span>SYSTEM TOPOLOGY</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold text-white uppercase font-display tracking-tight">
-              Skills &amp; Architecture Graph
-            </h2>
+        <motion.div variants={headingVariants} className="flex flex-col gap-4 border-b border-[var(--line)] pb-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="section-kicker mb-3">02 / Practice</p>
+            <h2 className="font-display text-5xl leading-none text-[var(--foreground)] sm:text-6xl">Skills with context</h2>
           </div>
-
-          <span className="text-xs font-mono text-zinc-400">
-            {`// Search or select a node to inspect evidence and connected work`}
-          </span>
+          <p className="max-w-sm text-sm leading-6 text-[var(--muted)] md:text-right">A focused toolkit built through projects, coursework, and practical experiments.</p>
         </motion.div>
 
-        {/* The Force-Directed Graph Engine */}
-        <motion.div variants={cardVariants}>
-          <ObsidianSkillGraph />
-        </motion.div>
+        <div className="grid gap-px border border-[var(--line)] bg-[var(--line)] sm:grid-cols-2">
+          {SKILL_GROUPS.map((group, index) => (
+            <motion.article key={group.key} variants={cardVariants} className="bg-[var(--surface)] p-6 sm:p-8">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-lg font-semibold text-[var(--foreground)]">{group.label}</p>
+                <span className="font-mono text-xs text-[var(--accent)]">0{index + 1}</span>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-x-5 gap-y-3">
+                {resumeData.skills[group.key].map((skill) => (
+                  <span key={skill} className="text-sm text-[var(--muted)] transition-colors hover:text-[var(--accent)]">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </motion.article>
+          ))}
+        </div>
       </motion.div>
     </section>
   );

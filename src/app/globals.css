@@ -1,57 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  /* Architectural Monochrome Studio Palette */
-  --background: #08080a;
-  --surface-base: #0f0f13;
-  --surface-elevated: #16161c;
-  --surface-card: #121217;
-  
-  --foreground: #f4f4f5;
-  --foreground-muted: #a1a1aa;
-  --foreground-dim: #71717a;
-  
-  --border-subtle: rgba(255, 255, 255, 0.07);
-  --border-active: rgba(255, 255, 255, 0.22);
-  --border-highlight: #ffffff;
-  
-  --primary: #ffffff;
-  --primary-hover: #e4e4e7;
-  --primary-foreground: #08080a;
+  --background: #0c0d0b;
+  --surface: #121411;
+  --surface-raised: #181b16;
+  --surface-soft: #20241d;
+  --foreground: #f1f2e9;
+  --muted: #a5aa9e;
+  --subtle: #747b6f;
+  --line: rgba(241, 242, 233, 0.13);
+  --line-strong: rgba(241, 242, 233, 0.28);
+  --accent: #c6f36b;
+  --accent-soft: rgba(198, 243, 107, 0.14);
+  --danger: #ff9f9a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-surface-base: var(--surface-base);
-  --color-surface-elevated: var(--surface-elevated);
-  --color-surface-card: var(--surface-card);
-  
-  --font-display: var(--font-syne), sans-serif;
-  --font-sans: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-soft: var(--surface-soft);
+  --color-accent: var(--accent);
+  --font-display: var(--font-newsreader), Georgia, serif;
+  --font-sans: var(--font-geist-sans), Arial, sans-serif;
   --font-mono: var(--font-geist-mono), monospace;
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #3a4234 var(--background);
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
   overflow-x: hidden;
   font-feature-settings: "tnum" 1, "zero" 1;
 }
 
-/* Studio Headings with Syne (Epic Pro styling) */
-h1, h2, h3, .font-display {
-  font-family: var(--font-syne), sans-serif;
-  letter-spacing: -0.03em;
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-newsreader), Georgia, serif;
+  letter-spacing: -0.035em;
 }
 
-/* Studio Stamps & Metadata Monospace */
 .font-mono {
   font-family: var(--font-geist-mono), monospace;
 }
 
-/* Lenis Smooth Scrolling */
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 html.lenis,
 html.lenis body {
   height: auto;
@@ -69,335 +91,68 @@ html.lenis body {
   overflow: hidden;
 }
 
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
+.portfolio-section {
+  border-bottom: 1px solid var(--line);
+  padding-block: clamp(4.5rem, 9vw, 8rem);
 }
 
-/* Architectural Studio Scrollbar */
-html {
-  scrollbar-width: thin;
-  scrollbar-color: #27272a #08080a;
-}
-
-html::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-
-html::-webkit-scrollbar-track {
-  background: #08080a;
-}
-
-html::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 2px;
-}
-
-html::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
-}
-
-/* Studio Architectural Bento Card (Solid Matte - No Glassmorphism) */
-.studio-card {
-  background-color: #0e0e13;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  position: relative;
-  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
-}
-
-.studio-card:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  background-color: #121218;
-}
-
-/* Kokonut UI Mouse Spotlight Container & Card Glow */
-.kokonut-card-glow {
-  position: relative;
-  background-color: #0c0c11;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-  transition: border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
-}
-
-.kokonut-card-glow:hover {
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 0 25px -8px rgba(255, 255, 255, 0.08);
-}
-
-.kokonut-spotlight-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  background: radial-gradient(
-    450px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-    rgba(255, 255, 255, 0.065),
-    transparent 60%
-  );
-}
-
-.kokonut-card-glow:hover .kokonut-spotlight-layer {
-  opacity: 1;
-}
-
-/* Kokonut Tactile Buttons */
-.kokonut-btn-primary {
-  background-color: #ffffff;
-  color: #000000;
+.section-kicker {
+  color: var(--accent);
   font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 8px 16px;
-  border: 1px solid #ffffff;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.kokonut-btn-primary:hover {
-  background-color: #e4e4e7;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
-}
-
-.kokonut-btn-primary:active {
-  transform: translateY(0);
-}
-
-.kokonut-btn-secondary {
-  background-color: #121217;
-  color: #d4d4d8;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.kokonut-btn-secondary:hover {
-  background-color: #181820;
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.3);
-  transform: translateY(-1px);
-}
-
-.kokonut-btn-secondary:active {
-  transform: translateY(0);
-}
-
-/* ==========================================================================
-   blkUI Design Kit — Brutalist Luxury Dark UI
-   ========================================================================== */
-
-/* Pure Black blkUI Surface Card */
-.blk-card {
-  position: relative;
-  background-color: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  overflow: hidden;
-  transition: border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.blk-card:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  box-shadow: 0 0 30px -10px rgba(255, 255, 255, 0.12);
-}
-
-/* blkUI Corner Crosshairs (+) */
-.blk-crosshair-tl {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-  transition: color 0.2s ease;
-}
-
-.blk-crosshair-tr {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-  transition: color 0.2s ease;
-}
-
-.blk-crosshair-bl {
-  position: absolute;
-  bottom: 4px;
-  left: 4px;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-  transition: color 0.2s ease;
-}
-
-.blk-crosshair-br {
-  position: absolute;
-  bottom: 4px;
-  right: 4px;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
-  line-height: 1;
-  color: rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-  transition: color 0.2s ease;
-}
-
-.blk-card:hover .blk-crosshair-tl,
-.blk-card:hover .blk-crosshair-tr,
-.blk-card:hover .blk-crosshair-bl,
-.blk-card:hover .blk-crosshair-br {
-  color: #ffffff;
-}
-
-/* blkUI Tactile Action Buttons */
-.blk-btn-primary {
-  background-color: #ffffff;
-  color: #000000;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 8px 16px;
-  border: 1px solid #ffffff;
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.blk-btn-primary:hover {
-  background-color: #e4e4e7;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.18);
-}
-
-.blk-btn-primary:active {
-  transform: translateY(1px);
-}
-
-.blk-btn-secondary {
-  background-color: #0a0a0e;
-  color: #e4e4e7;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 8px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.blk-btn-secondary:hover {
-  background-color: #14141b;
-  border-color: rgba(255, 255, 255, 0.4);
-  color: #ffffff;
-  transform: translateY(-1px);
-}
-
-.blk-btn-secondary:active {
-  transform: translateY(1px);
-}
-
-/* blkUI 3D Deck Perspective Container */
-.blk-deck-container {
-  perspective: 1200px;
-  transform-style: preserve-3d;
-}
-
-/* Precise Technical Corner Marks */
-.studio-corner-tl {
-  position: absolute;
-  top: -1px;
-  left: -1px;
-  width: 6px;
-  height: 6px;
-  border-top: 1.5px solid #ffffff;
-  border-left: 1.5px solid #ffffff;
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-.studio-corner-br {
-  position: absolute;
-  bottom: -1px;
-  right: -1px;
-  width: 6px;
-  height: 6px;
-  border-bottom: 1.5px solid #ffffff;
-  border-right: 1.5px solid #ffffff;
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-.studio-card:hover .studio-corner-tl,
-.studio-card:hover .studio-corner-br,
-.kokonut-card-glow:hover .studio-corner-tl,
-.kokonut-card-glow:hover .studio-corner-br {
-  opacity: 1;
-}
-
-/* Studio Metadata Stamp Badge */
-.studio-stamp {
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 10px;
-  text-transform: uppercase;
+  font-size: 0.7rem;
   letter-spacing: 0.12em;
-  padding: 3px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
-  color: #a1a1aa;
+  line-height: 1.4;
+  text-transform: uppercase;
 }
 
-/* Subtle Architectural Grid Lines */
-.studio-grid-bg {
-  background-size: 48px 48px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+.surface-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
 }
 
-/* SVG Line Drawing Path Setup */
-.studio-draw-path {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
+.surface-panel:hover {
+  border-color: var(--line-strong);
 }
 
-/* Selection */
+.accent-button {
+  background: var(--accent);
+  color: #091008;
+  transition: transform 160ms ease, opacity 160ms ease;
+}
+
+.accent-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.accent-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.horizontal-scroll {
+  scrollbar-width: none;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 ::selection {
-  background: #f4f4f5;
-  color: #08080a;
+  background: var(--accent);
+  color: #091008;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
 }

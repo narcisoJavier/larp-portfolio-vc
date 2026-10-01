@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, Syne } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import LenisProvider from "@/components/ui/LenisProvider";
-import WebMCPProvider from "@/components/WebMCPProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,15 +13,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const syne = Syne({
-  variable: "--font-syne",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
-  weight: ["700", "800"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
   title: "Narciso III Javier | Portfolio",
-  description: "Computer Science student specializing in scalable system architecture, containerization, and AI workflow automation. View projects, skills, and experience.",
+  description: "Portfolio of Narciso III Javier, a Computer Science student building practical systems, backend services, tooling, and game prototypes.",
   keywords: ["Narciso Javier", "Portfolio", "Computer Science", "Software Developer", "Full Stack", "Docker", "AI", "Python", "Go", "Next.js"],
   authors: [{ name: "Narciso III Javier" }],
   creator: "Narciso III Javier",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     url: "https://narcisojavier.vercel.app",
     siteName: "Narciso III Javier Portfolio",
     title: "Narciso III Javier | Portfolio",
-    description: "Computer Science student specializing in scalable system architecture, containerization, and AI workflow automation.",
+    description: "Practical systems, backend services, tooling, and game prototypes by Narciso III Javier.",
     images: [
       {
         url: "/og-image.jpg",
@@ -78,7 +78,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${newsreader.variable} ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any" />
@@ -88,11 +88,10 @@ export default function RootLayout({
         {/* Accessible Skip Navigation Link (WCAG 2.4.1) */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:font-mono focus:text-xs focus:font-bold focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-emerald-400"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-accent focus:text-[#091008] focus:font-mono focus:text-xs focus:font-bold focus:shadow-xl focus:outline-none focus:ring-2 focus:ring-[var(--accent)]"
         >
           Skip to Main Content
         </a>
-        <WebMCPProvider />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>
